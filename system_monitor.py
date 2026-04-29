@@ -448,7 +448,7 @@ class SystemMonitor:
                         key = self._read_key()
                         if key:
                             self._handle_key(key)
-                            if key in ("c", "m", "p", "t", "r"):
+                            if not self.running or key in ("c", "m", "p", "t", "r"):
                                 break
                         time.sleep(0.03)
             except KeyboardInterrupt:
