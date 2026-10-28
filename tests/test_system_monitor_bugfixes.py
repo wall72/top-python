@@ -28,3 +28,17 @@ def test_format_uptime_plural_days():
 
 def test_format_uptime_no_days():
     assert SystemMonitor._format_uptime(3661) == "01:01"
+
+
+def test_ema_step_moves_toward_target():
+    result = SystemMonitor._ema_step(prev=0.0, target=1.0, dt=60.0, tau=60.0)
+    assert 0.6 < result < 0.64  # 1 - e^-1 ≈ 0.632
+
+
+def test_ema_step_zero_dt_returns_prev():
+    assert SystemMonitor._ema_step(prev=0.5, target=1.0, dt=0.0, tau=60.0) == 0.5
+
+
+def test_ema_step_large_dt_approaches_target():
+    result = SystemMonitor._ema_step(prev=0.0, target=2.0, dt=100000.0, tau=60.0)
+    assert result == pytest.approx(2.0, abs=1e-6)

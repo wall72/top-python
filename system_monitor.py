@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import heapq
+import math
 import os
 import sys
 import time
@@ -45,6 +46,7 @@ class SystemMonitor:
         self.boot_time = psutil.boot_time()
         self.cpu_count = psutil.cpu_count(logical=True) or 1
         self.proc_cache: Dict[int, ProcCacheEntry] = {}
+        self._load_ema: List[float] = [0.0, 0.0, 0.0]
 
         self._enable_ansi_on_windows()
         self._disable_output_buffering()
@@ -101,6 +103,11 @@ class SystemMonitor:
         except OSError:
             return os.terminal_size((120, 40))
 
+    @staticmethod
+    def _ema_step(prev: float, target: float, dt: float, tau: float) -> float:
+        alpha = 1 - math.exp(-dt / tau)
+        return prev + alpha * (target - prev)
+
     def _loadavg(self, cpu_used: float) -> List[float]:
         if hasattr(os, "getloadavg"):
             try:
@@ -108,7 +115,12 @@ class SystemMonitor:
             except OSError:
                 pass
         pseudo_load = (cpu_used / 100.0) * self.cpu_count
-        return [pseudo_load, pseudo_load, pseudo_load]
+        taus = (60.0, 300.0, 900.0)
+        self._load_ema = [
+            self._ema_step(prev, pseudo_load, self.update_interval, tau)
+            for prev, tau in zip(self._load_ema, taus)
+        ]
+        return list(self._load_ema)
 
     def _cpu_breakdown(self) -> dict:
         times = psutil.cpu_times_percent(interval=None)
