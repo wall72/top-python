@@ -77,7 +77,8 @@ class SystemMonitor:
         hours = int((seconds % 86400) // 3600)
         minutes = int((seconds % 3600) // 60)
         if days > 0:
-            return f"{days} day, {hours:02d}:{minutes:02d}"
+            unit = "day" if days == 1 else "days"
+            return f"{days} {unit}, {hours:02d}:{minutes:02d}"
         return f"{hours:02d}:{minutes:02d}"
 
     @staticmethod
