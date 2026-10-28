@@ -85,6 +85,10 @@ class SystemMonitor:
         return value_bytes / (1024 * 1024)
 
     @staticmethod
+    def _priority_label(nice_value: int) -> str:
+        return str(20 + nice_value)
+
+    @staticmethod
     def _format_time_plus(seconds: float) -> str:
         minutes = int(seconds // 60)
         secs = seconds % 60
@@ -195,7 +199,7 @@ class SystemMonitor:
                     {
                         "pid": pid,
                         "user": entry.user,
-                        "pr": "rt" if nice_value < 0 else "20",
+                        "pr": self._priority_label(nice_value),
                         "ni": nice_value,
                         "virt": self._to_mib(getattr(mem_info, "vms", 0)),
                         "res": self._to_mib(getattr(mem_info, "rss", 0)),
