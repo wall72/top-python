@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=65"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "top-python"
+version = "0.1.0"
+description = "Linux top/htop 스타일의 터미널 시스템 모니터"
+requires-python = ">=3.10"
+dependencies = ["psutil>=5.9.0"]
+
+[project.scripts]
+top-python = "top_python.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["top_python*"]

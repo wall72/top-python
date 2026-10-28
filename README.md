@@ -45,7 +45,19 @@ pip install -r requirements.txt
 
 ```bash
 python system_monitor.py
+
+# 또는 설치 후 콘솔 스크립트로 실행
+pip install -e .
+top-python
 ```
+
+### CLI 옵션
+
+| 옵션 | 동작 |
+|------|------|
+| `--no-color` | ANSI 색상 출력을 비활성화 |
+| `--interval <초>` | 갱신 주기를 지정 (기본 1.0초, 0보다 큰 값) |
+| `--version` | 버전 정보 출력 후 종료 |
 
 ## 키보드 단축키
 
@@ -56,4 +68,8 @@ python system_monitor.py
 | `p` | PID 기준 정렬 |
 | `t` | CPU 시간 기준 정렬 |
 | `r` | 정렬 순서 전환 (오름차순 / 내림차순) |
+| `+` | 갱신 주기를 0.5초씩 늘림 |
+| `-` | 갱신 주기를 0.5초씩 줄임 (하한 0.5초) |
+| `e` | 프로세스 명령줄 전체 표시 토글 |
+| `1` | 코어별 CPU 사용률 표시 토글 |
 | `q` / `Ctrl+C` | 종료 |
