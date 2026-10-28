@@ -85,6 +85,8 @@ class SystemMonitor:
             self.update_interval = max(0.5, self.update_interval - 0.5)
         elif key == "e":
             self.show_cmdline = not self.show_cmdline
+        elif key == "1":
+            self.show_percpu = not self.show_percpu
 
     def run(self) -> None:
         print("Starting linux-style system monitor (q to quit)...", flush=True)
@@ -110,6 +112,7 @@ class SystemMonitor:
                     uptime = format_uptime(time.time() - self.boot_time)
                     cpu_used = max(0.0, 100.0 - cpu["id"])
                     loads = tuple(self._load_tracker.update(cpu_used, self.update_interval))
+                    percpu_values = psutil.cpu_percent(percpu=True, interval=None) if self.show_percpu else None
 
                     screen = build_screen(
                         rows,
@@ -124,6 +127,7 @@ class SystemMonitor:
                         self.update_interval,
                         enabled=self.enable_color,
                         show_percpu=self.show_percpu,
+                        percpu_values=percpu_values,
                     )
                     sys.stdout.write(screen)
                     sys.stdout.flush()

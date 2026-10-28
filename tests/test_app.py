@@ -50,3 +50,10 @@ def test_handle_key_e_toggles_show_cmdline():
     assert monitor.show_cmdline is True
     monitor.handle_key("e")
     assert monitor.show_cmdline is False
+
+
+def test_handle_key_1_toggles_show_percpu():
+    monitor = SystemMonitor()
+    assert monitor.show_percpu is False
+    monitor.handle_key("1")
+    assert monitor.show_percpu is True
