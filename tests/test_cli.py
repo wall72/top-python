@@ -21,3 +21,13 @@ def test_parse_args_interval_value():
 def test_parse_args_rejects_non_positive_interval():
     with pytest.raises(SystemExit):
         parse_args(["--interval", "0"])
+
+
+def test_version_flag_exits_zero(capsys):
+    from top_python import __version__
+
+    with pytest.raises(SystemExit) as exc_info:
+        parse_args(["--version"])
+    assert exc_info.value.code == 0
+    captured = capsys.readouterr()
+    assert __version__ in captured.out
