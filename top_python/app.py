@@ -83,6 +83,8 @@ class SystemMonitor:
             self.update_interval += 0.5
         elif key == "-":
             self.update_interval = max(0.5, self.update_interval - 0.5)
+        elif key == "e":
+            self.show_cmdline = not self.show_cmdline
 
     def run(self) -> None:
         print("Starting linux-style system monitor (q to quit)...", flush=True)

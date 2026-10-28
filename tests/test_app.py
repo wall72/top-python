@@ -41,3 +41,12 @@ def test_handle_key_minus_does_not_go_below_half_second():
     monitor.update_interval = 0.5
     monitor.handle_key("-")
     assert monitor.update_interval == 0.5
+
+
+def test_handle_key_e_toggles_show_cmdline():
+    monitor = SystemMonitor()
+    assert monitor.show_cmdline is False
+    monitor.handle_key("e")
+    assert monitor.show_cmdline is True
+    monitor.handle_key("e")
+    assert monitor.show_cmdline is False

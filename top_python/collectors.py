@@ -55,6 +55,12 @@ class ProcessCollector:
                 else:
                     cpu = proc.cpu_percent(interval=None)
 
+                if show_cmdline and entry.cmdline_full is None:
+                    try:
+                        entry.cmdline_full = " ".join(proc.cmdline()) or entry.cmd
+                    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                        pass
+
                 if status == psutil.STATUS_RUNNING:
                     states["running"] += 1
                 elif status in (psutil.STATUS_SLEEPING, psutil.STATUS_DISK_SLEEP):
@@ -85,7 +91,7 @@ class ProcessCollector:
                         cpu=max(float(cpu), 0.0),
                         mem=max(float(mem_percent), 0.0),
                         timep=cpu_time_sum,
-                        cmd=entry.cmd,
+                        cmd=entry.cmdline_full or entry.cmd,
                     )
                 )
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):

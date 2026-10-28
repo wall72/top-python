@@ -24,3 +24,15 @@ def test_load_average_tracker_moves_toward_target():
     first = tracker.update(cpu_used=50.0, dt=60.0)
     second = tracker.update(cpu_used=50.0, dt=60.0)
     assert second[0] > first[0]
+
+
+def test_collect_without_show_cmdline_never_caches_full_command():
+    collector = ProcessCollector()
+    collector.collect(show_cmdline=False)
+    assert all(entry.cmdline_full is None for entry in collector._cache.values())
+
+
+def test_collect_with_show_cmdline_populates_at_least_one_entry():
+    collector = ProcessCollector()
+    collector.collect(show_cmdline=True)
+    assert any(entry.cmdline_full is not None for entry in collector._cache.values())
