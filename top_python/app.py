@@ -79,6 +79,10 @@ class SystemMonitor:
             self.sort_reverse = True
         elif key == "r":
             self.sort_reverse = not self.sort_reverse
+        elif key == "+":
+            self.update_interval += 0.5
+        elif key == "-":
+            self.update_interval = max(0.5, self.update_interval - 0.5)
 
     def run(self) -> None:
         print("Starting linux-style system monitor (q to quit)...", flush=True)

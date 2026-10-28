@@ -20,3 +20,24 @@ def test_handle_key_r_toggles_reverse():
     before = monitor.sort_reverse
     monitor.handle_key("r")
     assert monitor.sort_reverse is not before
+
+
+def test_handle_key_plus_increases_interval():
+    monitor = SystemMonitor()
+    monitor.update_interval = 1.0
+    monitor.handle_key("+")
+    assert monitor.update_interval == 1.5
+
+
+def test_handle_key_minus_decreases_interval():
+    monitor = SystemMonitor()
+    monitor.update_interval = 1.0
+    monitor.handle_key("-")
+    assert monitor.update_interval == 0.5
+
+
+def test_handle_key_minus_does_not_go_below_half_second():
+    monitor = SystemMonitor()
+    monitor.update_interval = 0.5
+    monitor.handle_key("-")
+    assert monitor.update_interval == 0.5
