@@ -1,0 +1,23 @@
+from top_python.cli import parse_args
+import pytest
+
+
+def test_parse_args_defaults():
+    args = parse_args([])
+    assert args.no_color is False
+    assert args.interval == 1.0
+
+
+def test_parse_args_no_color_flag():
+    args = parse_args(["--no-color"])
+    assert args.no_color is True
+
+
+def test_parse_args_interval_value():
+    args = parse_args(["--interval", "2.5"])
+    assert args.interval == 2.5
+
+
+def test_parse_args_rejects_non_positive_interval():
+    with pytest.raises(SystemExit):
+        parse_args(["--interval", "0"])
