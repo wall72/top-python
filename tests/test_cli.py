@@ -23,6 +23,11 @@ def test_parse_args_rejects_non_positive_interval():
         parse_args(["--interval", "0"])
 
 
+def test_parse_args_rejects_non_numeric_interval():
+    with pytest.raises(SystemExit):
+        parse_args(["--interval", "abc"])
+
+
 def test_version_flag_exits_zero(capsys):
     from top_python import __version__
 
