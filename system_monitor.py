@@ -178,18 +178,18 @@ class SystemMonitor:
                     if entry.cmd == "?":
                         entry.cmd = info.get("name") or "?"
 
-                    if not entry.primed:
-                        proc.cpu_percent(interval=0.0)
-                        entry.primed = True
-                        cpu = 0.0
-                    else:
-                        cpu = proc.cpu_percent(interval=None)
-
                     status = info.get("status") or "unknown"
                     mem_info = info.get("memory_info")
                     cpu_times = info.get("cpu_times")
                     nice_value = info.get("nice")
                     mem_percent = info.get("memory_percent") or 0.0
+
+                if not entry.primed:
+                    proc.cpu_percent(interval=0.0)
+                    entry.primed = True
+                    cpu = 0.0
+                else:
+                    cpu = proc.cpu_percent(interval=None)
 
                 if status == psutil.STATUS_RUNNING:
                     states["running"] += 1
